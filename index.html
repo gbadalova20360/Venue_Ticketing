@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Interactive Venue Ticketing System</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+
+</head>
+<body>
+    <header class="header">
+        <h1>Large Auditorium</h1>
+        <p>Choose your seat and book your ticker</p>
+    </header>
+
+    <main>
+        <section class="price-zones">
+            <h2>Ticket Price Zones</h2>
+            <div class="zones">
+                <div>
+                    <h3>VIP</h3>
+                    <p>35 AZN</p>
+                </div>
+
+                <div>
+                    <h3>Premium</h3>
+                    <p>25 AZN</p>
+                </div>
+
+                <div>
+                    <h3>Standard</h3>
+                    <p>15 AZN</p>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="booking-layout">
+
+            <section id="auditorium">
+                <h2>Auditorium Map</h2>
+
+                <div id="stage">
+                    STAGE
+                </div>
+
+                <div id="seat-legend">
+                    <span>Available</span>
+                    <span>Selected</span>
+                    <span>In Cart</span>
+                    <span>Unavailable</span>
+                </div>
+
+                <div id="venue-viewport">
+                    <div id="venue-map"></div>
+                </div>
+
+                <div id="map-controls">
+                    <button id="zoom-in" type="button">Zoom In</button>
+                    <button id="zoom-out" type="button">Zoom Out</button>
+                    <button id="move-up" type="button">Move Up</button>
+                    <button id="move-down" type="button">Move Down</button>
+                    <button id="move-left" type="button">Move Left</button>
+                    <button id="move-right" type="button">Move Right</button>
+                    <button id="reset-view" type="button">Reset / Center View</button>
+                </div>
+            </section>
+
+            <aside id="sidebar">
+                <section id="seat-details">
+                    <h2>Seat Details</h2>
+                    <p id="seat-message">Select a seat to view its details</p>
+
+                    <div id="seat-info" hidden>
+                        <p>
+                            Section: <span id="seat-section">-</span>
+                        </p>
+
+                        <p>
+                            Row: <span id="seat-row">-</span>
+                        </p>
+
+                        <p>
+                            Seat: <span id="seat-number">-</span>
+                        </p>
+
+                        <p>
+                            Price: <span id="seat-price">-</span> AZN
+                        </p>
+
+                        <p>
+                            Status: <span id="seat-Status">-</span>
+                        </p>
+
+                        <button id="add-to-cart" type="button">ADD TO CART</button>
+                    </div>
+                </section>
+
+                <section id="shopping-cart">
+                    <h2>Your Cart</h2>
+                    <div id="cart-items">
+                        Your cart is empty.
+                    </div>
+                    <p>
+                        Total: <span id="cart-total">0.00</span> AZN
+                    </p>
+
+                </section>
+
+            </aside>
+
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
