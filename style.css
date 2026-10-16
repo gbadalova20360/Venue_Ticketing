@@ -1,0 +1,73 @@
+body {
+    background-color: #F3F6FA;
+    color:#173B5E;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1{
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-align: center;
+}
+
+h2{
+    font-size: 22px;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+button{
+    background-color: #176B87;
+    color:white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: 1px solid #176B87;
+}
+
+button:hover {
+    background-color: #12566D;
+}
+
+.venue-map{
+    width: 100%;
+    min-height:300px
+}
+
+.price-zones{
+    background-color: white;
+    border: 1px solid #DCE4ED;
+    border-radius:8px;
+    padding: 20px;
+    margin-bottom:24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.zones{
+    display:flex;
+    gap:16px;
+}
+
+.zones div {
+    background-color: white;
+    padding: 16px;
+    border: 1px solid #DCE4ED;
+    border-radius: 8px;
+    flex: 1;
+}
+
+.zones h3 {
+    color: #173B5E;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.zones p {
+    color: #176B87;
+    font-size: 16px;
+    font-weight: 700;
+}
