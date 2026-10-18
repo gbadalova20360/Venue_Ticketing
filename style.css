@@ -47,6 +47,11 @@ button:hover {
     border-color:#12566D;
 }
 
+button:focus-visible {
+    outline:3px solid #75B9A5;
+    outline-offset:3px;
+}
+
 .price-zones{
     background-color:white;
     border:1px solid #E1E4E8;
