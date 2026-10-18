@@ -1,73 +1,264 @@
 body {
-    background-color: #F3F6FA;
-    color:#173B5E;
-    font-family: Arial, Helvetica, sans-serif;
+    background-color:#F5F5F2;
+    color:#243047;
+    font-family:Arial, Helvetica, sans-serif;
+    margin:0;
+    padding:24px;
+    box-sizing:border-box;
 }
 
 h1{
-    font-size: 30px;
-    margin-bottom: 20px;
-    font-weight: 700;
-    text-align: center;
+    font-size:28px;
+    margin-bottom:8px;
+    font-weight:700;
+    text-align:left;
+    color:#243047;
+}
+
+.header p {
+    margin-top:0;
+    margin-bottom:24px;
 }
 
 h2{
-    font-size: 22px;
+    font-size:22px;
 }
 
 p {
-    font-size: 16px;
-    line-height: 1.6;
+    font-size:14px;
+    line-height:1.5;
+    color:#667085;
 }
 
 button{
-    background-color: #176B87;
+    background-color:#176B87;
     color:white;
     padding: 10px 16px;
-    border-radius: 6px;
-    border: 1px solid #176B87;
+    border-radius:6px;
+    border:1px solid #176B87;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background-color 0.2s ease;
 }
 
 button:hover {
-    background-color: #12566D;
-}
-
-.venue-map{
-    width: 100%;
-    min-height:300px
+    background-color:#12566D;
+    border-color:#12566D;
 }
 
 .price-zones{
-    background-color: white;
-    border: 1px solid #DCE4ED;
-    border-radius:8px;
-    padding: 20px;
+    background-color:white;
+    border:1px solid #E1E4E8;
+    border-radius:10px;
+    padding: 14px 18px;
     margin-bottom:24px;
-    width: 100%;
+    width:100%;
     box-sizing: border-box;
+}
+
+.price-zones h2 {
+    font-size:18px;
+    color:#243047;
+    margin-top:0;
+    margin-bottom:14px;
 }
 
 .zones{
     display:flex;
-    gap:16px;
+    gap:12px;
 }
 
 .zones div {
-    background-color: white;
-    padding: 16px;
-    border: 1px solid #DCE4ED;
-    border-radius: 8px;
-    flex: 1;
+    background-color:#FFFFFF;
+    padding: 12px 14px;
+    border:1px solid #E1E4E8;
+    border-radius:8px;
+    flex:1;
 }
 
 .zones h3 {
-    color: #173B5E;
-    font-size: 18px;
-    margin-bottom: 8px;
+    color:#243047;
+    font-size:16px;
+    margin: 0 0 6px;
 }
 
 .zones p {
-    color: #176B87;
-    font-size: 16px;
-    font-weight: 700;
+    color:#176B87;
+    font-size:15px;
+    font-weight:700;
+    margin:0;
+}
+
+#auditorium{
+    background-color:#FFFFFF;
+    border:1px solid #E1E4E8;
+    border-radius:10px;
+    padding:18px;
+    flex:1;
+    min-width:0;
+}
+#auditorium h2 {
+    font-size:20px;
+    color:#243047;
+    margin-top:0;
+    margin-bottom:18px;
+}
+
+#stage {
+    background-color:#243047;
+    color:white;
+    text-align:center;
+    padding:14px;
+    border-radius:8px;
+    margin-bottom:20px;
+    font-weight:700;
+    letter-spacing:2px;
+    font-size:13px;
+}
+
+#seat-legend{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    margin-bottom:20px;
+    color:#243047;
+    font-size:13px;
+    flex-wrap:wrap;
+
+}
+
+#venue-viewport {
+    background-color:#F8F8F5;
+    border: 1px solid #E1E4E8;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom:20px;
+}
+
+#venue-map{
+    width:100%;
+    min-height:300px;
+    display:grid;
+    gap:8px;
+    justify-content:center;
+    align-content:start;
+}
+
+
+#map-controls{
+    display:flex;
+    justify-content:center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+#sidebar{
+    background-color: white;
+    border: 1px solid #E1E4E8;
+    border-radius: 10px;
+    padding: 18px;
+    box-sizing: border-box;
+    width: 320px;
+    flex-shrink: 0;
+}
+
+#seat-details {
+    background-color:#F8F8F5;
+    border:1px solid #E1E4E8;
+    border-radius:10px;
+    padding:16px;
+    margin-bottom: 20px;
+}
+#shopping-cart {
+    background-color: #FFFFFF;
+    border: 1px solid #E1E4E8;
+    border-radius:10px;
+    padding:16px;
+    margin-top: 20px;
+}
+
+.booking-layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+#sidebar h2 {
+    font-size:18px;
+    font-weight:700;
+    color:#243047;
+    margin-top:0;
+    margin-bottom:14px;
+}
+
+#sidebar p {
+    font-size:14px;
+    line-height:1.6;
+    color:#667085;
+}
+main{
+    width:100%;
+    box-sizing:border-box;
+}
+
+.zone-color {
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:3px;
+    margin-right:6px;
+}
+
+.vip-color {
+    background-color:#C99D30;
+}
+.premium-color {
+    background-color:#D66A94;
+}
+.standard-color {
+    background-color:#648CF5;
+}
+
+.legend-color {
+    display: inline-block;
+    width:10px;
+    height:10px;
+    border-radius:3px;
+    margin-right:6px;
+}
+
+.available-color {
+    background-color:#75B9A5;
+}
+.selected-color {
+    background-color:#176B87;
+}
+.cart-color {
+    background-color:#C99D30;
+}
+.unavailable-color {
+    background-color:#D5D7DA;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding:12px;
+    }
+    .booking-layout {
+        flex-direction:column;
+        gap:16px;
+    }
+    #auditorium,
+    #sidebar {
+        width:100%;
+        box-sizing:border-box;
+    }
+    .zones {
+        flex-direction:column;
+    }
+    #map-controls {
+        flex-wrap:wrap;
+    }
 }

@@ -13,7 +13,7 @@
 <body>
     <header class="header">
         <h1>Large Auditorium</h1>
-        <p>Choose your seat and book your ticker</p>
+        <p>Choose your seat and book your ticket</p>
     </header>
 
     <main>
@@ -21,17 +21,17 @@
             <h2>Ticket Price Zones</h2>
             <div class="zones">
                 <div>
-                    <h3>VIP</h3>
+                    <h3><span class="zone-color vip-color"></span>VIP</h3>
                     <p>35 AZN</p>
                 </div>
 
                 <div>
-                    <h3>Premium</h3>
+                    <h3><span class="zone-color premium-color"></span>Premium</h3>
                     <p>25 AZN</p>
                 </div>
 
                 <div>
-                    <h3>Standard</h3>
+                    <h3><span class="zone-color standard-color"></span>Standard</h3>
                     <p>15 AZN</p>
                 </div>
             </div>
@@ -48,10 +48,10 @@
                 </div>
 
                 <div id="seat-legend">
-                    <span>Available</span>
-                    <span>Selected</span>
-                    <span>In Cart</span>
-                    <span>Unavailable</span>
+                    <span><i class="legend-color available-color"></i>Available</span>
+                    <span><i class="legend-color selected-color"></i>Selected</span>
+                    <span><i class="legend-color cart-color"></i>In Cart</span>
+                    <span><i class="legend-color unavailable-color"></i>Unavailable</span>
                 </div>
 
                 <div id="venue-viewport">
@@ -92,7 +92,7 @@
                         </p>
 
                         <p>
-                            Status: <span id="seat-Status">-</span>
+                            Status: <span id="seat-status">-</span>
                         </p>
 
                         <button id="add-to-cart" type="button">ADD TO CART</button>
