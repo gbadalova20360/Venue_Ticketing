@@ -170,8 +170,12 @@ button:focus-visible {
 .seat {
     width: 30px;
     height: 30px;
-    padding: 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     font-size: 10px;
+    background-color: #75B9A5;
+    color: white;
 }
 
 #map-controls{
@@ -291,13 +295,20 @@ main{
     }
 }
 
-.seat {
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 10px;
+.seat.available {
     background-color: #75B9A5;
-    color: white;
+}
+
+.seat.selected {
+    background-color: #176B87;
+}
+
+.seat.in-cart {
+    background-color: #C99D30;
+}
+
+.seat.unavailable {
+    background-color: #D5D7DA;
+    color: #243047;
+    cursor: not-allowed;
 }
