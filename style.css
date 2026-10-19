@@ -139,17 +139,40 @@ button:focus-visible {
     border-radius: 10px;
     padding: 16px;
     margin-bottom:20px;
+    overflow: auto;
 }
 
-#venue-map{
-    width:100%;
-    min-height:300px;
-    display:grid;
-    gap:8px;
-    justify-content:center;
-    align-content:start;
+
+#venue-map {
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    gap: 40px 24px;
+    justify-content: center;
+    align-items: start;
+    width: max-content;
+    min-width: 100%;
 }
 
+.seat-section {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    gap: 6px;
+    align-content: start;
+}
+
+.seat-section h3 {
+    grid-column: 1 / -1;
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    font-size: 10px;
+}
 
 #map-controls{
     display:flex;
@@ -266,4 +289,15 @@ main{
     #map-controls {
         flex-wrap:wrap;
     }
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10px;
+    background-color: #75B9A5;
+    color: white;
 }
