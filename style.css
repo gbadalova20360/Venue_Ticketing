@@ -3,7 +3,7 @@ body {
     color:#243047;
     font-family:Arial, Helvetica, sans-serif;
     margin:0;
-    padding:24px;
+    padding:12px;
     box-sizing:border-box;
 }
 
@@ -17,7 +17,8 @@ h1{
 
 .header p {
     margin-top:0;
-    margin-bottom:24px;
+    margin-bottom: 12px;
+
 }
 
 h2{
@@ -65,9 +66,10 @@ button:focus-visible {
 .price-zones h2 {
     font-size:18px;
     color:#243047;
-    margin-top:0;
-    margin-bottom:14px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
 }
+
 
 .zones{
     display:flex;
@@ -99,7 +101,7 @@ button:focus-visible {
     background-color:#FFFFFF;
     border:1px solid #E1E4E8;
     border-radius:10px;
-    padding:18px;
+    padding:12px;
     flex:1;
     min-width:0;
 }
@@ -134,28 +136,28 @@ button:focus-visible {
 }
 
 #venue-viewport {
-    background-color:#F8F8F5;
+    background-color: #F8F8F5;
     border: 1px solid #E1E4E8;
     border-radius: 10px;
     padding: 16px;
-    margin-bottom:20px;
-    overflow: auto;
+    margin-bottom: 20px;
+    height: 460px;
+    overflow: hidden;
+    position: relative;
 }
-
 
 #venue-map {
     display: grid;
     grid-template-columns: repeat(3, max-content);
     gap: 40px 24px;
-    justify-content: center;
     align-items: start;
     width: max-content;
-    min-width: 100%;
+    transform-origin: 0 0;
+    transition: transform 0.2s ease;
 }
-
 .seat-section {
     display: grid;
-    grid-template-columns: repeat(10, 30px);
+    grid-template-columns: repeat(var(--seats-per-row, 10), 30px);
     gap: 6px;
     align-content: start;
 }
@@ -176,6 +178,7 @@ button:focus-visible {
     font-size: 10px;
     background-color: #75B9A5;
     color: white;
+    padding:0;
 }
 
 #map-controls{
@@ -190,10 +193,10 @@ button:focus-visible {
     background-color: white;
     border: 1px solid #E1E4E8;
     border-radius: 10px;
-    padding: 18px;
     box-sizing: border-box;
-    width: 320px;
     flex-shrink: 0;
+    width: 300px;
+    padding: 12px;
 }
 
 #seat-details {
@@ -213,8 +216,8 @@ button:focus-visible {
 
 .booking-layout {
     display: flex;
-    gap: 24px;
-    align-items: flex-start;
+    gap: 12px;
+    align-items: stretch;
 }
 
 #sidebar h2 {
@@ -261,54 +264,87 @@ main{
     margin-right:6px;
 }
 
-.available-color {
-    background-color:#75B9A5;
+.cart-color { 
+    background-color: #E4572E;
 }
 .selected-color {
     background-color:#176B87;
 }
-.cart-color {
-    background-color:#C99D30;
-}
 .unavailable-color {
     background-color:#D5D7DA;
 }
-
-@media (max-width: 768px) {
-    body {
-        padding:12px;
-    }
-    .booking-layout {
-        flex-direction:column;
-        gap:16px;
-    }
-    #auditorium,
-    #sidebar {
-        width:100%;
-        box-sizing:border-box;
-    }
-    .zones {
-        flex-direction:column;
-    }
-    #map-controls {
-        flex-wrap:wrap;
-    }
+.seat.available{ 
+    background-color: var(--zone-color, #75B9A5);
+}
+.seat.selected{ 
+    background-color: #176B87; outline: 3px solid #243047;
+}
+.seat.in-cart{ 
+    background-color: #E4572E;
+}
+.seat.unavailable{ 
+    background-color: #D5D7DA; color: #243047; cursor: not-allowed;
 }
 
-.seat.available {
-    background-color: #75B9A5;
-}
 
-.seat.selected {
-    background-color: #176B87;
-}
-
-.seat.in-cart {
-    background-color: #C99D30;
-}
-
-.seat.unavailable {
+button:disabled {
     background-color: #D5D7DA;
-    color: #243047;
+    border-color: #D5D7DA;
+    color: #667085;
     cursor: not-allowed;
 }
+
+/* Responsive layout for mobile screens */
+@media (max-width: 768px) {
+    body {
+        padding: 8px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .price-zones {
+        padding: 12px;
+        margin-bottom: 14px;
+    }
+
+    .zones {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .zones div {
+        padding: 10px 12px;
+    }
+
+    .booking-layout {
+        flex-direction: column;
+        height: auto;
+        gap: 12px;
+    }
+
+    #auditorium {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #sidebar {
+        width: 100%;
+    }
+
+    #map-controls {
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    #map-controls button {
+        padding: 8px 10px;
+    }
+     #venue-viewport {
+      height: 380px;
+  }
+}
+
+
+

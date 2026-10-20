@@ -43,6 +43,12 @@ const sections = [
     }
 ];
 
+const zoneColors = {
+    "VIP": "#C99D30",
+    "Premium": "#D66A94",
+    "Standard": "#648CF5"
+};
+
 const seats = [];
 sections.forEach(section => {
     for (let row = 1; row <= section.rows; row++) {
@@ -59,7 +65,6 @@ sections.forEach(section => {
     }
 });
 
-
 const venueMap = document.getElementById("venue-map");
 
 const unavailableSeats = [
@@ -69,25 +74,83 @@ const unavailableSeats = [
     "back-center-3-7",
     "back-right-2-2"
 ];
-seats.forEach(seat => {
-    const seatId =
-        seat.sectionId + "-" + seat.row + "-" + seat.number;
 
-    if (unavailableSeats.includes(seatId)) {
+let selectedSeat = null;
+const cart = [];
+
+function getSeatId(seat) {
+    return seat.sectionId + "-" + seat.row + "-" + seat.number;
+}
+
+function updateSeatElement(seat) {
+    const seatElement = document.querySelector(
+        '[data-seat-id="' + getSeatId(seat) + '"]'
+    );
+    if (seatElement) {
+        seatElement.classList.remove("available", "selected", "in-cart", "unavailable");
+        seatElement.classList.add(seat.status);
+    }
+}
+
+seats.forEach(seat => {
+    if (unavailableSeats.includes(getSeatId(seat))) {
         seat.status = "unavailable";
     }
 });
 
-let selectedSeat = null;
-const cart = [];
+const statusNames = {
+    "available": "Available",
+    "selected": "Available - selected",
+    "in-cart": "In cart",
+    "unavailable": "Unavailable"
+};
+
+function showSeatDetails(seat) {
+    document.getElementById("seat-message").hidden = true;
+    document.getElementById("seat-info").hidden = false;
+
+    document.getElementById("seat-section").textContent = seat.section;
+    document.getElementById("seat-row").textContent = seat.row;
+    document.getElementById("seat-number").textContent = seat.number;
+    document.getElementById("seat-price").textContent = seat.price;
+    document.getElementById("seat-status").textContent = statusNames[seat.status];
+
+    document.getElementById("add-to-cart").disabled = seat.status !== "selected";
+}
+
+function hideSeatDetails() {
+    document.getElementById("seat-info").hidden = true;
+    document.getElementById("seat-message").hidden = false;
+}
+
+function selectSeat(seat) {
+
+    if (selectedSeat !== null && selectedSeat.status === "selected") {
+        selectedSeat.status = "available";
+        updateSeatElement(selectedSeat);
+    }
+    selectedSeat = seat;
+
+    if (seat.status === "available") {
+        seat.status = "selected";
+        updateSeatElement(seat);
+    }
+    showSeatDetails(seat);
+}
+
 function createSeats() {
     sections.forEach(section => {
         const sectionElement = document.createElement("div");
         sectionElement.classList.add("seat-section");
+        sectionElement.style.setProperty(
+                 "--seats-per-row",
+                 section.seatsPerRow
+        );
         sectionElement.id = section.id;
 
         const sectionTitle = document.createElement("h3");
-        sectionTitle.textContent = section.name;
+        sectionTitle.textContent =
+            section.id.replace("-", " ") + " (" + section.name + ")";
         sectionElement.appendChild(sectionTitle);
 
         const sectionSeats = seats.filter(
@@ -100,88 +163,43 @@ function createSeats() {
             seatElement.type = "button";
             seatElement.classList.add("seat");
             seatElement.textContent = seat.number;
-
-            seatElement.dataset.seatId =
-                seat.sectionId + "-" + seat.row + "-" + seat.number;
+            seatElement.dataset.seatId = getSeatId(seat);
             seatElement.classList.add(seat.status);
+            seatElement.style.setProperty("--zone-color", zoneColors[seat.section]);
+            seatElement.setAttribute(
+                "aria-label",
+                seat.section + ", row " + seat.row + ", seat " + seat.number
+            );
 
             seatElement.addEventListener("click", function () {
-                if (
-                    seat.status === "in-cart" ||
-                    seat.status === "unavailable"
-                ) {
-                    return;
-                }
-                seats.forEach(previousSeat => {
-                    if (previousSeat.status === "selected") {
-                        previousSeat.status = "available";
-
-                        const previousElement = document.querySelector(
-                            '[data-seat-id="' +
-                            previousSeat.sectionId + "-" +
-                            previousSeat.row + "-" +
-                            previousSeat.number + '"]'
-                        );
-
-                        if (previousElement) {
-                            previousElement.classList.remove("selected");
-                            previousElement.classList.add("available");
-                        }
-                    }
-                });
-                seat.status = "selected";
-                selectedSeat = seat;
-                seatElement.classList.remove("available");
-                seatElement.classList.add("selected");
-                document.getElementById("seat-message").hidden = true;
-                document.getElementById("seat-info").hidden = false;
-
-                document.getElementById("seat-section").textContent =
-                    seat.section;
-
-                document.getElementById("seat-row").textContent =
-                    seat.row;
-
-                document.getElementById("seat-number").textContent =
-                    seat.number;
-
-                document.getElementById("seat-price").textContent =
-                    seat.price;
-
-                document.getElementById("seat-status").textContent =
-                    seat.status;
+                selectSeat(seat);
             });
+
             sectionElement.appendChild(seatElement);
         });
         venueMap.appendChild(sectionElement);
     });
 }
 
-const savedCart = JSON.parse(
-    localStorage.getItem("venueCart")
-) || [];
-savedCart.forEach(seatId => {
-    const seat = seats.find(seat => {
-        return (
-            seat.sectionId + "-" +
-            seat.row + "-" +
-            seat.number === seatId
-        );
-    });
-    if (seat) {
-        seat.status = "in-cart";
-        cart.push(seat);
-    }
-});
-
-createSeats();
-renderCart();
 function saveCart() {
-    const cartData = cart.map(seat => {
-        return seat.sectionId + "-" + seat.row + "-" + seat.number;
-    });
-
+    const cartData = cart.map(seat => getSeatId(seat));
     localStorage.setItem("venueCart", JSON.stringify(cartData));
+}
+
+function loadCart() {
+    let savedCart = [];
+    try {
+        savedCart = JSON.parse(localStorage.getItem("venueCart")) || [];
+    } catch (error) {
+        savedCart = [];
+    }
+    savedCart.forEach(seatId => {
+        const seat = seats.find(seat => getSeatId(seat) === seatId);
+        if (seat && seat.status === "available") {
+            seat.status = "in-cart";
+            cart.push(seat);
+        }
+    });
 }
 
 function renderCart() {
@@ -189,48 +207,38 @@ function renderCart() {
     const cartTotal = document.getElementById("cart-total");
     cartItems.innerHTML = "";
     let total = 0;
+
     if (cart.length === 0) {
         cartItems.textContent = "Your cart is empty.";
     }
+
     cart.forEach(seat => {
-    const item = document.createElement("p");
-    item.textContent =
-        seat.section + " - Row " + seat.row +
-        ", Seat " + seat.number +
-        " - " + seat.price + " AZN";
+        const item = document.createElement("p");
+        item.textContent =
+            seat.section + " - Row " + seat.row +
+            ", Seat " + seat.number +
+            " - " + seat.price + " AZN ";
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "Remove";
+        removeButton.type = "button";
 
-    const removeButton = document.createElement("button");
-    removeButton.textContent = "Remove";
-    removeButton.type = "button";
+        removeButton.addEventListener("click", function () {
+            cart.splice(cart.indexOf(seat), 1);
+            seat.status = "available";
+            updateSeatElement(seat);
+            saveCart();
+            if (selectedSeat === seat) {
+                selectedSeat = null;
+                hideSeatDetails();
+            }
+            renderCart();
+        });
 
-    removeButton.addEventListener("click", function () {
-        const seatIndex = cart.indexOf(seat);
-        cart.splice(seatIndex, 1);
-        saveCart();
-        seat.status = "available";
-        const seatElement = document.querySelector(
-            '[data-seat-id="' +
-            seat.sectionId + "-" +
-            seat.row + "-" +
-            seat.number + '"]'
-        );
-
-        if (seatElement) {
-            seatElement.classList.remove("in-cart");
-            seatElement.classList.remove("selected");
-            seatElement.classList.add("available");
-        }
-        if (selectedSeat === seat) {
-            selectedSeat = null;
-        }
-        document.getElementById("seat-info").hidden = true;
-        document.getElementById("seat-message").hidden = false;
-        renderCart();
+        item.appendChild(removeButton);
+        cartItems.appendChild(item);
+        total += seat.price;
     });
-    item.appendChild(removeButton);
-    cartItems.appendChild(item);
-    total += seat.price;
-});
+
     cartTotal.textContent = total.toFixed(2);
 }
 
@@ -246,21 +254,99 @@ addToCartButton.addEventListener("click", function () {
     if (cart.includes(selectedSeat)) {
         return;
     }
+
     cart.push(selectedSeat);
     selectedSeat.status = "in-cart";
+    updateSeatElement(selectedSeat);
     saveCart();
-    const seatElement = document.querySelector(
-        '[data-seat-id="' +
-        selectedSeat.sectionId + "-" +
-        selectedSeat.row + "-" +
-        selectedSeat.number + '"]'
-    );
-    seatElement.classList.remove("selected");
-    seatElement.classList.add("in-cart");
-    document.getElementById("seat-status").textContent = "in-cart";
     renderCart();
-    selectedSeat = null;
+    showSeatDetails(selectedSeat);
 });
 
+loadCart();
+createSeats();
+renderCart();
 
+const viewport = document.getElementById("venue-viewport");
+const viewportPadding = 16;
+let zoomLevel = 1;
+let moveX = 0;
+let moveY = 0;
 
+function updateMapView() {
+    const mapWidth = venueMap.offsetWidth * zoomLevel;
+    const mapHeight = venueMap.offsetHeight * zoomLevel;
+    const viewWidth = viewport.clientWidth - viewportPadding * 2;
+    const viewHeight = viewport.clientHeight - viewportPadding * 2;
+    moveX = Math.max(-mapWidth + 100, Math.min(viewWidth - 100, moveX));
+    moveY = Math.max(-mapHeight + 100, Math.min(viewHeight - 100, moveY));
+
+    venueMap.style.transform =
+        `translate(${moveX}px, ${moveY}px) scale(${zoomLevel})`;
+}
+
+function fitMapToScreen() {
+    const viewWidth = viewport.clientWidth - viewportPadding * 2;
+    const viewHeight = viewport.clientHeight - viewportPadding * 2;
+    const mapWidth = venueMap.offsetWidth;
+    const mapHeight = venueMap.offsetHeight;
+    zoomLevel = Math.min(viewWidth / mapWidth, viewHeight / mapHeight, 1);
+    moveX = (viewWidth - mapWidth * zoomLevel) / 2;
+    moveY = (viewHeight - mapHeight * zoomLevel) / 2;
+
+    updateMapView();
+}
+
+function zoomMap(newZoom) {
+    const centerX = (viewport.clientWidth - viewportPadding * 2) / 2;
+    const centerY = (viewport.clientHeight - viewportPadding * 2) / 2;
+    const ratio = newZoom / zoomLevel;
+    moveX = centerX - (centerX - moveX) * ratio;
+    moveY = centerY - (centerY - moveY) * ratio;
+    zoomLevel = newZoom;
+    updateMapView();
+}
+
+document.getElementById("zoom-in").addEventListener("click", function () {
+    zoomMap(Math.min(zoomLevel + 0.1, 2));
+});
+
+document.getElementById("zoom-out").addEventListener("click", function () {
+    zoomMap(Math.max(zoomLevel - 0.1, 0.2));
+});
+
+document.getElementById("move-up").addEventListener("click", function () {
+    moveY += 30;
+    updateMapView();
+});
+
+document.getElementById("move-down").addEventListener("click", function () {
+    moveY -= 30;
+    updateMapView();
+});
+
+document.getElementById("move-left").addEventListener("click", function () {
+    moveX += 30;
+    updateMapView();
+});
+
+document.getElementById("move-right").addEventListener("click", function () {
+    moveX -= 30;
+    updateMapView();
+});
+
+document.getElementById("reset-view").addEventListener("click", function () {
+    fitMapToScreen();
+});
+
+let lastWidth = window.innerWidth;
+window.addEventListener("resize", function () {
+    if (window.innerWidth !== lastWidth) {
+        lastWidth = window.innerWidth;
+        fitMapToScreen();
+    }
+});
+
+window.addEventListener("load", function () {
+    fitMapToScreen();
+});
