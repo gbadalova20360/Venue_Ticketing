@@ -163,29 +163,37 @@ button:focus-visible {
     transition: transform 0.2s ease;
 }
 .seat-section {
-    display: grid;
-    grid-template-columns: repeat(var(--seats-per-row, 10), 30px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 6px;
-    align-content: start;
 }
 
 .seat-section h3 {
-    grid-column: 1 / -1;
     margin: 0 0 8px;
     text-align: center;
     font-size: 14px;
 }
 
+.seat-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    height: 30px;
+    align-items: flex-start;
+}
+
 .seat {
+    flex: 0 0 30px;
     width: 30px;
     height: 30px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 10px;
-    background-color: #75B9A5;
+    background-color: var(--zone-color, #75B9A5);
     color: white;
-    padding:0;
+    padding: 0;
 }
 
 #map-controls{

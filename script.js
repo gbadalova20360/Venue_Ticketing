@@ -132,46 +132,61 @@ function selectSeat(seat) {
     showSeatDetails(seat);
 }
 
+
 function createSeats() {
     sections.forEach(section => {
         const sectionElement = document.createElement("div");
         sectionElement.classList.add("seat-section");
-        sectionElement.style.setProperty(
-                 "--seats-per-row",
-                 section.seatsPerRow
-        );
         sectionElement.id = section.id;
         const sectionTitle = document.createElement("h3");
         sectionTitle.textContent =
-            section.id.replace("-", " ") + " (" + section.name + ")";
+            section.id.replace("-", " ") +
+            " (" + section.name + ")";
         sectionElement.appendChild(sectionTitle);
-
         const sectionSeats = seats.filter(
             seat => seat.sectionId === section.id
         );
-
-        sectionSeats.forEach(seat => {
-            const seatElement = document.createElement("button");
-
-            seatElement.type = "button";
-            seatElement.classList.add("seat");
-            seatElement.textContent = seat.number;
-            seatElement.dataset.seatId = getSeatId(seat);
-            seatElement.classList.add(seat.status);
-            seatElement.style.setProperty("--zone-color", zoneColors[seat.section]);
-            seatElement.setAttribute(
-                "aria-label",
-                seat.section + ", row " + seat.row + ", seat " + seat.number
+        for (let row = 1; row <= section.rows; row++) {
+            const rowElement = document.createElement("div");
+            rowElement.classList.add("seat-row");
+            const rowSeats = sectionSeats.filter(
+                seat => seat.row === row
             );
-            seatElement.addEventListener("click", function () {
-                selectSeat(seat);
+            rowSeats.forEach((seat, index) => {
+                const seatElement = document.createElement("button");
+                seatElement.type = "button";
+                seatElement.classList.add("seat");
+                seatElement.textContent = seat.number;
+                seatElement.dataset.seatId = getSeatId(seat);
+                seatElement.classList.add(seat.status);
+                seatElement.style.setProperty(
+                    "--zone-color",
+                    zoneColors[seat.section]
+                );
+                const middle = (rowSeats.length - 1) / 2;
+                const offset = middle === 0
+                    ? 0
+                    : (index - middle) / middle;
+                const curve = 12;
+                const verticalOffset = curve * offset * offset;
+                seatElement.style.transform =
+                    `translateY(${verticalOffset}px)`;
+                seatElement.setAttribute(
+                    "aria-label",
+                    seat.section + ", row " + seat.row +
+                    ", seat " + seat.number
+                );
+                seatElement.addEventListener("click", function () {
+                    selectSeat(seat);
+                });
+                rowElement.appendChild(seatElement);
             });
-
-            sectionElement.appendChild(seatElement);
-        });
+            sectionElement.appendChild(rowElement);
+        }
         venueMap.appendChild(sectionElement);
     });
 }
+
 function saveCart() {
     const cartData = cart.map(seat => getSeatId(seat));
     localStorage.setItem("venueCart", JSON.stringify(cartData));
