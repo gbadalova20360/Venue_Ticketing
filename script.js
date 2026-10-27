@@ -66,12 +66,17 @@ sections.forEach(section => {
 });
 
 const venueMap = document.getElementById("venue-map");
+
 const unavailableSeats = [
-    "front-left-1-1",
-    "front-left-2-3",
-    "front-center-1-5",
-    "back-center-3-7",
-    "back-right-2-2"
+    "Front-left-1-1",
+    "Front-left-2-3",
+    "Front-left-3-7",
+    "Front-center-1-5",
+    "Front-center-4-8",
+    "Front-right-2-6",
+    "Back-center-3-7",
+    "Back-center-5-4",
+    "Back-right-2-2"
 ];
 let selectedSeat = null;
 const cart = [];
