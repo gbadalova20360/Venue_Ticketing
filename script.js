@@ -1,41 +1,41 @@
 const sections = [
     {
-        id: "front-left",
+        id: "Front-left",
         name: "Standard",
         price: 15,
         rows: 6,
         seatsPerRow: 10
     },
     {
-        id: "front-center",
+        id: "Front-center",
         name: "VIP",
         price: 35,
         rows: 8,
         seatsPerRow: 10
     },
     {
-        id: "front-right",
+        id: "Front-right",
         name: "Standard",
         price: 15,
         rows: 6,
         seatsPerRow: 10
     },
     {
-        id: "back-left",
+        id: "Back-left",
         name: "Standard",
         price: 15,
         rows: 5,
         seatsPerRow: 8
     },
     {
-        id: "back-center",
+        id: "Back-center",
         name: "Premium",
         price: 25,
         rows: 10,
         seatsPerRow: 10
     },
     {
-        id: "back-right",
+        id: "Back-right",
         name: "Standard",
         price: 15,
         rows: 6,
