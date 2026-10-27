@@ -66,7 +66,6 @@ sections.forEach(section => {
 });
 
 const venueMap = document.getElementById("venue-map");
-
 const unavailableSeats = [
     "front-left-1-1",
     "front-left-2-3",
@@ -74,10 +73,8 @@ const unavailableSeats = [
     "back-center-3-7",
     "back-right-2-2"
 ];
-
 let selectedSeat = null;
 const cart = [];
-
 function getSeatId(seat) {
     return seat.sectionId + "-" + seat.row + "-" + seat.number;
 }
@@ -108,7 +105,6 @@ const statusNames = {
 function showSeatDetails(seat) {
     document.getElementById("seat-message").hidden = true;
     document.getElementById("seat-info").hidden = false;
-
     document.getElementById("seat-section").textContent = seat.section;
     document.getElementById("seat-row").textContent = seat.row;
     document.getElementById("seat-number").textContent = seat.number;
@@ -124,13 +120,11 @@ function hideSeatDetails() {
 }
 
 function selectSeat(seat) {
-
     if (selectedSeat !== null && selectedSeat.status === "selected") {
         selectedSeat.status = "available";
         updateSeatElement(selectedSeat);
     }
     selectedSeat = seat;
-
     if (seat.status === "available") {
         seat.status = "selected";
         updateSeatElement(seat);
@@ -147,7 +141,6 @@ function createSeats() {
                  section.seatsPerRow
         );
         sectionElement.id = section.id;
-
         const sectionTitle = document.createElement("h3");
         sectionTitle.textContent =
             section.id.replace("-", " ") + " (" + section.name + ")";
@@ -170,7 +163,6 @@ function createSeats() {
                 "aria-label",
                 seat.section + ", row " + seat.row + ", seat " + seat.number
             );
-
             seatElement.addEventListener("click", function () {
                 selectSeat(seat);
             });
@@ -180,12 +172,10 @@ function createSeats() {
         venueMap.appendChild(sectionElement);
     });
 }
-
 function saveCart() {
     const cartData = cart.map(seat => getSeatId(seat));
     localStorage.setItem("venueCart", JSON.stringify(cartData));
 }
-
 function loadCart() {
     let savedCart = [];
     try {
@@ -206,12 +196,11 @@ function renderCart() {
     const cartItems = document.getElementById("cart-items");
     const cartTotal = document.getElementById("cart-total");
     cartItems.innerHTML = "";
-    let total = 0;
+    let total =0;
 
     if (cart.length === 0) {
         cartItems.textContent = "Your cart is empty.";
     }
-
     cart.forEach(seat => {
         const item = document.createElement("p");
         item.textContent =
@@ -221,14 +210,13 @@ function renderCart() {
         const removeButton = document.createElement("button");
         removeButton.textContent = "Remove";
         removeButton.type = "button";
-
         removeButton.addEventListener("click", function () {
             cart.splice(cart.indexOf(seat), 1);
             seat.status = "available";
             updateSeatElement(seat);
             saveCart();
             if (selectedSeat === seat) {
-                selectedSeat = null;
+                selectedSeat =null;
                 hideSeatDetails();
             }
             renderCart();
@@ -241,22 +229,20 @@ function renderCart() {
 
     cartTotal.textContent = total.toFixed(2);
 }
-
 const addToCartButton = document.getElementById("add-to-cart");
 
 addToCartButton.addEventListener("click", function () {
-    if (selectedSeat === null) {
+    if (selectedSeat ===null) {
         return;
     }
-    if (selectedSeat.status !== "selected") {
+    if (selectedSeat.status !=="selected") {
         return;
     }
     if (cart.includes(selectedSeat)) {
         return;
     }
-
     cart.push(selectedSeat);
-    selectedSeat.status = "in-cart";
+    selectedSeat.status ="in-cart";
     updateSeatElement(selectedSeat);
     saveCart();
     renderCart();
@@ -280,7 +266,6 @@ function updateMapView() {
     const viewHeight = viewport.clientHeight - viewportPadding * 2;
     moveX = Math.max(-mapWidth + 100, Math.min(viewWidth - 100, moveX));
     moveY = Math.max(-mapHeight + 100, Math.min(viewHeight - 100, moveY));
-
     venueMap.style.transform =
         `translate(${moveX}px, ${moveY}px) scale(${zoomLevel})`;
 }
@@ -290,63 +275,60 @@ function fitMapToScreen() {
     const viewHeight = viewport.clientHeight - viewportPadding * 2;
     const mapWidth = venueMap.offsetWidth;
     const mapHeight = venueMap.offsetHeight;
-    zoomLevel = Math.min(viewWidth / mapWidth, viewHeight / mapHeight, 1);
-    moveX = (viewWidth - mapWidth * zoomLevel) / 2;
-    moveY = (viewHeight - mapHeight * zoomLevel) / 2;
-
+    zoomLevel = Math.min(viewWidth/mapWidth, viewHeight/mapHeight, 1);
+    moveX = (viewWidth - mapWidth * zoomLevel)/2;
+    moveY = (viewHeight - mapHeight * zoomLevel)/2;
     updateMapView();
 }
 
 function zoomMap(newZoom) {
-    const centerX = (viewport.clientWidth - viewportPadding * 2) / 2;
-    const centerY = (viewport.clientHeight - viewportPadding * 2) / 2;
+    const centerX = (viewport.clientWidth - viewportPadding * 2)/2;
+    const centerY = (viewport.clientHeight - viewportPadding * 2)/2;
     const ratio = newZoom / zoomLevel;
-    moveX = centerX - (centerX - moveX) * ratio;
+    moveX = centerX -(centerX - moveX) * ratio;
     moveY = centerY - (centerY - moveY) * ratio;
     zoomLevel = newZoom;
     updateMapView();
 }
 
 document.getElementById("zoom-in").addEventListener("click", function () {
-    zoomMap(Math.min(zoomLevel + 0.1, 2));
+    zoomMap(Math.min(zoomLevel+0.1, 2));
 });
 
 document.getElementById("zoom-out").addEventListener("click", function () {
-    zoomMap(Math.max(zoomLevel - 0.1, 0.2));
+    zoomMap(Math.max(zoomLevel-0.1, 0.2));
 });
 
 document.getElementById("move-up").addEventListener("click", function () {
-    moveY += 30;
+    moveY+=30;
     updateMapView();
 });
 
 document.getElementById("move-down").addEventListener("click", function () {
-    moveY -= 30;
+    moveY-=30;
     updateMapView();
 });
 
 document.getElementById("move-left").addEventListener("click", function () {
-    moveX += 30;
+    moveX+=30;
     updateMapView();
 });
 
 document.getElementById("move-right").addEventListener("click", function () {
-    moveX -= 30;
+    moveX-=30;
     updateMapView();
 });
 
 document.getElementById("reset-view").addEventListener("click", function () {
     fitMapToScreen();
 });
-
 let lastWidth = window.innerWidth;
 window.addEventListener("resize", function () {
-    if (window.innerWidth !== lastWidth) {
+    if (window.innerWidth!==lastWidth) {
         lastWidth = window.innerWidth;
         fitMapToScreen();
     }
 });
-
 window.addEventListener("load", function () {
     fitMapToScreen();
 });
