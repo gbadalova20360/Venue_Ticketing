@@ -315,6 +315,21 @@ button:disabled {
     color: #667085;
     cursor: not-allowed;
 }
+
+#venue-viewport {
+    cursor: grab;
+    touch-action: none;
+}
+
+#venue-viewport.dragging {
+    cursor: grabbing;
+}
+
+#venue-viewport.dragging #venue-map {
+    transition: none;
+    user-select: none;
+}
+
 @media (max-width: 768px) {
     body {
         padding: 8px;

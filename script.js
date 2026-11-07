@@ -80,6 +80,7 @@ const unavailableSeats = [
 ];
 let selectedSeat = null;
 const cart = [];
+let suppressSeatClick = false;
 function getSeatId(seat) {
     return seat.sectionId + "-" + seat.row + "-" + seat.number;
 }
@@ -182,8 +183,12 @@ function createSeats() {
                     ", seat " + seat.number
                 );
                 seatElement.addEventListener("click", function () {
-                    selectSeat(seat);
-                });
+                        if (suppressSeatClick) {
+                            return;
+                }
+
+    selectSeat(seat);
+});
                 rowElement.appendChild(seatElement);
             });
             sectionElement.appendChild(rowElement);
@@ -352,3 +357,79 @@ window.addEventListener("resize", function () {
 window.addEventListener("load", function () {
     fitMapToScreen();
 });
+
+viewport.addEventListener("wheel", function(event) {
+    event.preventDefault();
+    const rect = viewport.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left - viewportPadding;
+    const mouseY = event.clientY - rect.top - viewportPadding;
+    const zoomFactor = event.deltaY < 0 ? 1.1 : 0.9;
+    const newZoom = Math.max(
+        0.2,
+        Math.min(2, zoomLevel * zoomFactor)
+    );
+
+    const ratio = newZoom / zoomLevel;
+    moveX = mouseX - (mouseX - moveX) * ratio;
+    moveY = mouseY - (mouseY - moveY) * ratio;
+    zoomLevel = newZoom;
+    updateMapView();
+
+}, { passive: false });
+
+
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let initialMoveX = 0;
+let initialMoveY = 0;
+viewport.addEventListener("pointerdown", function(event) {
+    if (event.pointerType === "mouse" && event.button !== 0) {
+        return;
+    }
+    isDragging = true;
+    startX = event.clientX;
+    startY = event.clientY;
+    initialMoveX = moveX;
+    initialMoveY = moveY;
+    suppressSeatClick = false;
+    viewport.classList.add("dragging");
+
+});
+document.addEventListener("pointermove", function(event) {
+    if (!isDragging) {
+        return;
+    }
+    const differenceX = event.clientX - startX;
+    const differenceY = event.clientY - startY;
+    if (
+        Math.abs(differenceX) > 4 ||
+        Math.abs(differenceY) > 4
+    ) {
+        suppressSeatClick = true;
+    }
+    if (suppressSeatClick) {
+
+        moveX = initialMoveX + differenceX;
+        moveY = initialMoveY + differenceY;
+
+        updateMapView();
+    }
+
+});
+
+function stopDragging() {
+    if (!isDragging) {
+        return;
+    }
+    isDragging = false;
+    viewport.classList.remove("dragging");
+    if (suppressSeatClick) {
+        setTimeout(function() {
+            suppressSeatClick = false;
+        }, 0);
+    }
+
+}
+document.addEventListener("pointerup", stopDragging);
+document.addEventListener("pointercancel", stopDragging);
